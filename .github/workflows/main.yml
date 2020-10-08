@@ -33,7 +33,7 @@ jobs:
           restore-keys: |
             Library-${{ matrix.projectPath }}-
             Library-
-#      - uses: webbertakken/unity-test-runner@v1.3
+#      - uses: webbertakken/unity-test-runner@master
 #        id: testRunner
 #        with:
 #          projectPath: ${{ matrix.projectPath }}
@@ -42,7 +42,7 @@ jobs:
 #        with:
 #          name: Test results (all modes)
 #          path: ${{ steps.testRunner.outputs.artifactsPath }}
-      - uses: webbertakken/unity-builder@v0.10
+      - uses: webbertakken/unity-builder@master
         with:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
