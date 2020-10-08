@@ -1,6 +1,6 @@
 # unity-actions example
 
-Example using unity-actions to test and build a unity project
+Example using unity-actions to test and build a unity project. More information at [unity-ci.com](https://unity-ci.com)
 
 ## Points of interest
 
