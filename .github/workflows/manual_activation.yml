@@ -1,5 +1,6 @@
 name: Acquire activation file
 on:
+  push: { branches: [main] }
   workflow_dispatch:
     inputs:
       unityVersion:
