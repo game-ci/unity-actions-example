@@ -1,8 +1,6 @@
 name: Actions 😎
 
-on:
-  pull_request: {}
-  push: { branches: [main] }
+on: [push, pull_request]
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -64,13 +62,13 @@ jobs:
 #        with:
 #          name: Test results (all modes)
 #          path: ${{ steps.testRunner.outputs.artifactsPath }}
-      - uses: webbertakken/unity-builder@master
+      - uses: webbertakken/unity-builder@${{ matrix.unityBuilderVersion }}
         with:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
           customParameters: '-nographics'
-      - uses: actions/upload-artifact@${{ matrix.unityBuilderVersion }}
+      - uses: actions/upload-artifact@v1
         with:
           name: Build
           path: build
