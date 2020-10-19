@@ -1,15 +1,13 @@
 name: Actions 😎
 
-on:
-  pull_request: {}
-  push: { branches: [main] }
+on: [push, pull_request]
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
 jobs:
   buildAndTestForSomePlatforms:
-    name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
+    name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }} with unity-builder version ${{ matrix.unityBuilderVersion }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -22,6 +20,29 @@ jobs:
           - StandaloneOSX
           - StandaloneWindows64
           - StandaloneLinux64
+          - WebGL
+        unityBuilderVersion:
+          - master
+          - v0.1
+          - v0.10
+          - v0.11
+          - v0.12
+          - v0.13
+          - v0.14
+          - v0.15
+          - v0.2
+          - v0.3
+          - v0.4
+          - v0.5
+          - v0.6
+          - v0.7
+          - v0.8
+          - v0.9
+          - v1.0
+          - v1.1
+          - v1.2
+          - v1.3
+          - v1.4
     steps:
       - uses: actions/checkout@v2
         with:
@@ -42,13 +63,154 @@ jobs:
 #        with:
 #          name: Test results (all modes)
 #          path: ${{ steps.testRunner.outputs.artifactsPath }}
-      - uses: webbertakken/unity-builder@master
+      - if: matrix.unityBuilderVersion == 'master'
+        uses: webbertakken/unity-builder@master
         with:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
           customParameters: '-nographics'
-      - uses: actions/upload-artifact@v1
+      - if: matrix.unityBuilderVersion == 'v0.1'
+        uses: webbertakken/unity-builder@v0.1
         with:
-          name: Build
-          path: build
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.10'
+        uses: webbertakken/unity-builder@v0.10
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.11'
+        uses: webbertakken/unity-builder@v0.11
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.12'
+        uses: webbertakken/unity-builder@v0.12
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.13'
+        uses: webbertakken/unity-builder@v0.13
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.14'
+        uses: webbertakken/unity-builder@v0.14
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.15'
+        uses: webbertakken/unity-builder@v0.15
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.2'
+        uses: webbertakken/unity-builder@v0.2
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.3'
+        uses: webbertakken/unity-builder@v0.3
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.4'
+        uses: webbertakken/unity-builder@v0.4
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.5'
+        uses: webbertakken/unity-builder@v0.5
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.6'
+        uses: webbertakken/unity-builder@v0.6
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.7'
+        uses: webbertakken/unity-builder@v0.7
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.8'
+        uses: webbertakken/unity-builder@v0.8
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v0.9'
+        uses: webbertakken/unity-builder@v0.9
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v1.0'
+        uses: webbertakken/unity-builder@v1.0
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v1.1'
+        uses: webbertakken/unity-builder@v1.1
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v1.2'
+        uses: webbertakken/unity-builder@v1.2
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v1.3'
+        uses: webbertakken/unity-builder@v1.3
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - if: matrix.unityBuilderVersion == 'v1.4'
+        uses: webbertakken/unity-builder@v1.4
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: '-nographics'
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.targetPlatform }}-unity-builder-${{ matrix.unityBuilderVersion }}
+          path: build/${{ matrix.targetPlatform }}
