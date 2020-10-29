@@ -1,4 +1,4 @@
-name: Unity Actions
+name: Unity Testrunner
 
 on:
   pull_request: {}
