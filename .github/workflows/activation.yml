@@ -10,7 +10,7 @@ jobs:
       id: getManualLicenseFile
       uses: webbertakken/unity-request-manual-activation-file@v1.1
       with:
-        unityVersion: 2019.2.11f1
+        unityVersion: 2020.1.7f1
 # Upload artifact (Unity_v20XX.X.XXXX.alf)
     - name: Expose as artifact
       uses: actions/upload-artifact@v1
@@ -18,5 +18,5 @@ jobs:
         name: ${{ steps.getManualLicenseFile.outputs.filePath }}
         path: ${{ steps.getManualLicenseFile.outputs.filePath }}
 # Activate Unity based on Secret
-    - name: Unity - Activate
-      uses: webbertakken/unity-activate@v1.3
+#    - name: Unity - Activate
+#      uses: webbertakken/unity-activate@v1.3
