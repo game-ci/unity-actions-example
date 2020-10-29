@@ -1,8 +1,6 @@
 name: Unity Testrunner
 
-on:
-  pull_request: {}
-  push: { branches: [main, master, develop] }
+on: [push]
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
