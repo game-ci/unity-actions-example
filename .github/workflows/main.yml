@@ -2,7 +2,8 @@ name: Unity Actions
 
 on:
   pull_request: {}
-  push: { branches: [main, master, develop] }
+  push: {}
+  #  push: { branches: [main, master, develop] }
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -91,7 +92,7 @@ jobs:
           restore-keys: |
             Library-${{ matrix.projectPath }}-
             Library-
-      - uses: webbertakken/unity-builder@v2.0-alpha-3
+      - uses: webbertakken/unity-builder@v2.0-aplha-5
         with:
           projectPath: ${{ env.PROJECT_PATH }}
           unityVersion: ${{ env.UNITY_VERSION }}
