@@ -6,7 +6,6 @@ on:
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-  UNITY_VERSION: 2020.1.7f1
   PROJECT_PATH: .
 
 jobs:
@@ -30,7 +29,8 @@ jobs:
       # Request manual activation file
       - name: Request manual activation file
         id: getManualLicenseFile
-        uses: webbertakken/unity-request-manual-activation-file@main
+        # https://github.com/game-ci/unity-request-activation-file/releases/
+        uses: game-ci/unity-request-manual-activation-file@v2.0-alpha-1
         with:
           unityVersion: ${{ env.UNITY_VERSION }}
       # Upload artifact (Unity_v20XX.X.XXXX.alf)
@@ -56,14 +56,15 @@ jobs:
           restore-keys: |
             Library-test-project-
             Library-
-      - uses: webbertakken/unity-test-runner@v1.7
+      # https://github.com/game-ci/unity-test-runner/releases/
+      - uses: game-ci/unity-test-runner@v2.0-alpha-2
         id: testRunner
         with:
           projectPath: ${{ env.PROJECT_PATH }}
           unityVersion: ${{ env.UNITY_VERSION }}
           testMode: all
           customParameters: "-nographics"
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         with:
           name: Test results (all modes)
           path: ${{ steps.testRunner.outputs.artifactsPath }}
@@ -78,8 +79,13 @@ jobs:
       matrix:
         targetPlatform:
           - StandaloneOSX
+          - StandaloneWindows
           - StandaloneWindows64
           - StandaloneLinux64
+          - iOS
+          - Android
+          # See https://github.com/game-ci/docker/issues/53 webgl will be supported in editor image v0.9
+          # - WebGL
     steps:
       - uses: actions/checkout@v2
         with:
@@ -91,12 +97,13 @@ jobs:
           restore-keys: |
             Library-${{ matrix.projectPath }}-
             Library-
-      - uses: webbertakken/unity-builder@v2.0-aplha-5
+      # https://github.com/game-ci/unity-builder/releases/
+      - uses: game-ci/unity-builder@v2.0-alpha-6
         with:
           projectPath: ${{ env.PROJECT_PATH }}
           unityVersion: ${{ env.UNITY_VERSION }}
           targetPlatform: ${{ matrix.targetPlatform }}
       - uses: actions/upload-artifact@v2
         with:
-          name: Build
+          name: Build-${{ matrix.targetPlatform }}
           path: build
