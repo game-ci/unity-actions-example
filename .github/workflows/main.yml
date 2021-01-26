@@ -84,7 +84,8 @@ jobs:
           - StandaloneLinux64
           - iOS
           - Android
-          - WebGL
+          # See https://github.com/game-ci/docker/issues/53 webgl will be supported in editor image v0.9
+          # - WebGL
     steps:
       - uses: actions/checkout@v2
         with:
