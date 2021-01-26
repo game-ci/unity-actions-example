@@ -79,8 +79,12 @@ jobs:
       matrix:
         targetPlatform:
           - StandaloneOSX
+          - StandaloneWindows
           - StandaloneWindows64
           - StandaloneLinux64
+          - iOS
+          - Android
+          - WebGL
     steps:
       - uses: actions/checkout@v2
         with:
@@ -100,5 +104,5 @@ jobs:
           targetPlatform: ${{ matrix.targetPlatform }}
       - uses: actions/upload-artifact@v2
         with:
-          name: Build
+          name: Build-${{ matrix.targetPlatform }}
           path: build
