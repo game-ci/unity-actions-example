@@ -31,8 +31,6 @@ jobs:
         id: getManualLicenseFile
         # https://github.com/game-ci/unity-request-activation-file/releases/
         uses: game-ci/unity-request-manual-activation-file@v2.0-alpha-1
-        with:
-          unityVersion: ${{ env.UNITY_VERSION }}
       # Upload artifact (Unity_v20XX.X.XXXX.alf)
       - name: Expose as artifact
         uses: actions/upload-artifact@v1
@@ -61,7 +59,6 @@ jobs:
         id: testRunner
         with:
           projectPath: ${{ env.PROJECT_PATH }}
-          unityVersion: ${{ env.UNITY_VERSION }}
           testMode: all
           customParameters: "-nographics"
       - uses: actions/upload-artifact@v2
@@ -72,7 +69,7 @@ jobs:
   build:
     needs: [checklicense]
     if: needs.checklicense.outputs.is_unity_license_set == 'true'
-    name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
+    name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -101,7 +98,6 @@ jobs:
       - uses: game-ci/unity-builder@v2.0-alpha-6
         with:
           projectPath: ${{ env.PROJECT_PATH }}
-          unityVersion: ${{ env.UNITY_VERSION }}
           targetPlatform: ${{ matrix.targetPlatform }}
       - uses: actions/upload-artifact@v2
         with:
