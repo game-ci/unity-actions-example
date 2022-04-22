@@ -102,18 +102,16 @@ jobs:
           name: Build-${{ matrix.targetPlatform }}
           path: build
 
-  buildWithWindows:
-    needs: [build]
+  buildWithMac:
+    needs: [checklicense]
     if: needs.checklicense.outputs.is_unity_license_set == 'true'
     name: Build for ${{ matrix.targetPlatform }}
-    runs-on: windows-2019
+    runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
         targetPlatform:
-          - StandaloneWindows
-          - StandaloneWindows64
-          - WSAPlayer
+          - StandaloneOSX
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -136,16 +134,18 @@ jobs:
           name: Build-${{ matrix.targetPlatform }}
           path: build
 
-  buildWithMac:
-    needs: [buildWithWindows]
+  buildWithWindows:
+    needs: [build, buildWithMac]
     if: needs.checklicense.outputs.is_unity_license_set == 'true'
     name: Build for ${{ matrix.targetPlatform }}
-    runs-on: macos-latest
+    runs-on: windows-2019
     strategy:
       fail-fast: false
       matrix:
         targetPlatform:
-          - StandaloneOSX
+          - StandaloneWindows
+          - StandaloneWindows64
+          - WSAPlayer
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
