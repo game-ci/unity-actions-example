@@ -77,7 +77,6 @@ jobs:
       fail-fast: false
       matrix:
         targetPlatform:
-          - StandaloneWindows
           - StandaloneLinux64
           - iOS
           - Android
@@ -112,6 +111,7 @@ jobs:
       fail-fast: false
       matrix:
         targetPlatform:
+          - StandaloneWindows
           - StandaloneWindows64
           - WSAPlayer
     steps:
