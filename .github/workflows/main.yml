@@ -12,9 +12,22 @@ env:
   PROJECT_PATH: .
 
 jobs:
-### See https://game.ci/docs/github/getting-started
+  checklicense:
+    name: Check for UNITY_LICENSE in GitHub Secrets
+    runs-on: ubuntu-latest
+    outputs:
+      is_unity_license_set: ${{ steps.checklicense_job.outputs.is_unity_license_set }}
+    steps:
+      - name: Check whether unity activation requests should be done
+        id: checklicense_job
+        run: |
+            echo "Skip activation job: ${{ env.UNITY_LICENSE != '' }}"
+            export is_unity_license_set="${{ env.UNITY_LICENSE != '' }}"
+            echo "is_unity_license_set=$is_unity_license_set" >> $GITHUB_OUTPUT
+
   activation:
-    if: ${{ env.UNITY_LICENSE == '' }}
+    needs: [checklicense]
+    if: needs.checklicense.outputs.is_unity_license_set == 'false'
     name: Request manual activation file 🔑
     runs-on: ubuntu-latest
     steps:
@@ -30,7 +43,8 @@ jobs:
           path: ${{ steps.getManualLicenseFile.outputs.filePath }}
 
   test:
-    if: ${{ env.UNITY_LICENSE != '' }}
+    needs: [checklicense]
+    if: needs.checklicense.outputs.is_unity_license_set == 'true'
     name: Run all tests ✨
     runs-on: ubuntu-latest
     steps:
@@ -39,7 +53,7 @@ jobs:
           lfs: true
       - uses: actions/cache@v3
         with:
-          path: ${{ env.projectPath }}/Library
+          path: ${{ env.PROJECT_PATH }}/Library
           key: Library-test
       - uses: game-ci/unity-test-runner@v2
         id: testRunner
@@ -69,7 +83,7 @@ jobs:
           lfs: true
       - uses: actions/cache@v3
         with:
-          path: ${{ env.projectPath }}/Library
+          path: ${{ env.PROJECT_PATH }}/Library
           key: Library-${{ matrix.targetPlatform }}
       - uses: game-ci/unity-builder@v2
         with:
@@ -95,7 +109,7 @@ jobs:
           lfs: true
       - uses: actions/cache@v3
         with:
-          path: ${{ matrix.projectPath }}/Library
+          path: ${{ env.PROJECT_PATH }}/Library
           key: Library-${{ matrix.targetPlatform }}
       - uses: game-ci/unity-builder@v2
         with:
@@ -123,7 +137,7 @@ jobs:
           lfs: true
       - uses: actions/cache@v3
         with:
-          path: ${{ env.projectPath }}/Library
+          path: ${{ env.PROJECT_PATH }}/Library
           key: Library-${{ matrix.targetPlatform }}
       - uses: game-ci/unity-builder@v2
         with:
