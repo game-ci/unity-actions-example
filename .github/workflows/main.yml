@@ -5,14 +5,10 @@ on:
   push: {}
   workflow_dispatch: {}
 
-env:
-  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-  PROJECT_PATH: .
-
 jobs:
   checklicense:
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
     name: Check for UNITY_LICENSE in GitHub Secrets
     runs-on: ubuntu-latest
     outputs:
@@ -47,6 +43,11 @@ jobs:
     if: needs.checklicense.outputs.is_unity_license_set == 'true'
     name: Run all tests ✨
     runs-on: ubuntu-latest
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      PROJECT_PATH: .
     steps:
       - uses: actions/checkout@v3
         with:
@@ -69,6 +70,11 @@ jobs:
     needs: [test]
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      PROJECT_PATH: .
     strategy:
       fail-fast: false
       matrix:
@@ -98,6 +104,11 @@ jobs:
     needs: [build]
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: macos-latest
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      PROJECT_PATH: .
     strategy:
       fail-fast: false
       matrix:
@@ -124,6 +135,11 @@ jobs:
     needs: [buildWithMac]
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: windows-2019
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      PROJECT_PATH: .
     strategy:
       fail-fast: false
       matrix:
