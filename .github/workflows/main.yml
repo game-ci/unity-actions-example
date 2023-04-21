@@ -5,10 +5,9 @@ on:
   push: {}
   workflow_dispatch: {}
 
+### Refer to https://game.ci/docs/github/getting-started
 jobs:
   checklicense:
-    env:
-      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
     name: Check for UNITY_LICENSE in GitHub Secrets
     runs-on: ubuntu-latest
     outputs:
@@ -16,6 +15,10 @@ jobs:
     steps:
       - name: Check whether unity activation requests should be done
         id: checklicense_job
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         run: |
             echo "Skip activation job: ${{ env.UNITY_LICENSE != '' }}"
             export is_unity_license_set="${{ env.UNITY_LICENSE != '' }}"
@@ -43,23 +46,21 @@ jobs:
     if: needs.checklicense.outputs.is_unity_license_set == 'true'
     name: Run all tests ✨
     runs-on: ubuntu-latest
-    env:
-      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-      PROJECT_PATH: .
     steps:
       - uses: actions/checkout@v3
         with:
           lfs: true
       - uses: actions/cache@v3
         with:
-          path: ${{ env.PROJECT_PATH }}/Library
+          path: Library
           key: Library-test
       - uses: game-ci/unity-test-runner@v2
         id: testRunner
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          projectPath: ${{ env.PROJECT_PATH }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v3
         with:
@@ -70,11 +71,6 @@ jobs:
     needs: [test]
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
-    env:
-      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-      PROJECT_PATH: .
     strategy:
       fail-fast: false
       matrix:
@@ -89,26 +85,24 @@ jobs:
           lfs: true
       - uses: actions/cache@v3
         with:
-          path: ${{ env.PROJECT_PATH }}/Library
+          path: Library
           key: Library-${{ matrix.targetPlatform }}
       - uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          projectPath: ${{ env.PROJECT_PATH }}
           targetPlatform: ${{ matrix.targetPlatform }}
       - uses: actions/upload-artifact@v3
         with:
           name: Build-${{ matrix.targetPlatform }}
-          path: ${{ env.PROJECT_PATH }}/build
+          path: build
 
   buildWithMac:
     needs: [build]
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: macos-latest
-    env:
-      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-      PROJECT_PATH: .
     strategy:
       fail-fast: false
       matrix:
@@ -120,26 +114,24 @@ jobs:
           lfs: true
       - uses: actions/cache@v3
         with:
-          path: ${{ env.PROJECT_PATH }}/Library
+          path: Library
           key: Library-${{ matrix.targetPlatform }}
       - uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          projectPath: ${{ env.PROJECT_PATH }}
           targetPlatform: ${{ matrix.targetPlatform }}
       - uses: actions/upload-artifact@v3
         with:
           name: Build-${{ matrix.targetPlatform }}
-          path: ${{ env.PROJECT_PATH }}/build
+          path: build
 
   buildWithWindows:
     needs: [buildWithMac]
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: windows-2019
-    env:
-      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-      PROJECT_PATH: .
     strategy:
       fail-fast: false
       matrix:
@@ -153,13 +145,16 @@ jobs:
           lfs: true
       - uses: actions/cache@v3
         with:
-          path: ${{ env.PROJECT_PATH }}/Library
+          path: Library
           key: Library-${{ matrix.targetPlatform }}
       - uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          projectPath: ${{ env.PROJECT_PATH }}
           targetPlatform: ${{ matrix.targetPlatform }}
       - uses: actions/upload-artifact@v3
         with:
           name: Build-${{ matrix.targetPlatform }}
-          path: ${{ env.PROJECT_PATH }}/build
+          path: build
