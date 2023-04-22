@@ -129,7 +129,7 @@ jobs:
           path: build
 
   buildWithWindows:
-    needs: [build]
+    needs: build
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: windows-2019
     strategy:
@@ -158,7 +158,7 @@ jobs:
           path: build
 
   buildWithWindows2:
-    needs: [buildWithWindows]
+    needs: buildWithWindows
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: windows-2019
     strategy:
