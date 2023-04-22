@@ -129,7 +129,36 @@ jobs:
           path: build
 
   buildWithWindows:
-    needs: [buildWithMac]
+    needs: [build]
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - WSAPlayer
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+      - uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: build
+
+  buildWithWindows2:
+    needs: [buildWithWindows]
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: windows-2019
     strategy:
@@ -138,7 +167,6 @@ jobs:
         targetPlatform:
           - StandaloneWindows
           - StandaloneWindows64
-          - WSAPlayer
     steps:
       - uses: actions/checkout@v3
         with:
